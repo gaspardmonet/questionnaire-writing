@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+  font-family: HiraMinPro-W3;
+  src: url('./assets/fonts/HiraMinPro-W3.otf');
+}
+@font-face {
+  font-family: HiraMinPro-W6;
+  src: url('./assets/fonts/HiraMinPro-W6.otf');
+}
+@font-face {
+  font-family: KoxGoPr6N-Bold;
+  src: url('./assets/fonts/KozGoPr6N-Bold.otf');
+}
+@font-face {
+  font-family: KoxGoPr6N-Medium;
+  src: url('./assets/fonts/KozGoPr6N-Medium.otf');
+}
+@font-face {
+  font-family: KoxGoPr6N-Regular;
+  src: url('./assets/fonts/KozGoPr6N-Regular.otf');
+}
+
+html {
+  font-size: 0.76923vw;
+  font-size: clamp(8px, 0.76923vw, 10px);
+  margin: 0;
+}
+@media print, screen and (max-width: 641px) {
+  html {
+    font-size: 1.5625vw;
+  }
+}
+
+body {
+  box-sizing: border-box;
+  margin: 2rem;
+  font-family: HiraMinoPro-W3;
+}
+
+.table-border {
+  border: 1px solid #4085c9;
+  border-collapse: collapse;
+}
+
+/* Track */
+.scrollbar-container::-webkit-scrollbar {
+  display: hidden;
+  width: 0px; /* Width of the scrollbar */
+}
+
+/* Track */
+.scrollbar-container::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color of the track */
+}
+
+/* Handle */
+.scrollbar-container::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar handle */
+}
+
+/* Handle on hover */
+.scrollbar-container::-webkit-scrollbar-thumb:hover {
+  display: block;
+  background: #555; /* Color of the scrollbar handle when hovered */
+}
