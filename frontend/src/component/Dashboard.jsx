@@ -16,7 +16,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    navigate("/question");
+    navigate("/smile");
   }, []);
   const handleClickLevelBtn = (index) => {
     if (index === serviceLevel) {
@@ -31,10 +31,10 @@ const Dashboard = () => {
     };
     if (serviceLevel >= 0 && serviceLevel <= 1) {
       dispatch(postAFeedback(feedback));
-      navigate('/question/post/good_feedback/waiting');
+      navigate('/smile/post/good_feedback/waiting');
     } else {
       dispatch(postTempFeedback(feedback));
-      navigate('/question/post/bad_feedback/waiting');
+      navigate('/smile/post/bad_feedback/waiting');
     }
   }
   return (

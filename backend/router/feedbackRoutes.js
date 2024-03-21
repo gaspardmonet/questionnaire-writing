@@ -7,5 +7,6 @@ const router = express.Router();
 router.post('/post', feedbackController.createAFeedback);
 router.get('/all', feedbackController.getAllFeedbacks);
 router.put('/response/:id', requireAuth, feedbackController.updateAResponse);
+router.delete('/delete/:id', requireAuth, feedbackController.deleteAResponse);
 
 module.exports = router;

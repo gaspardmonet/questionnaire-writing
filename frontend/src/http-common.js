@@ -1,17 +1,7 @@
-// import axios from "axios";
-
-// export default axios.create({
-//   baseURL: "http://localhost:5000/api",
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Authorization": `Bearer ${localStorage.getItem("token")}`
-//   }
-// });
-
 import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "https://star55.net/api",
 });
 
 axiosInstance.interceptors.request.use(

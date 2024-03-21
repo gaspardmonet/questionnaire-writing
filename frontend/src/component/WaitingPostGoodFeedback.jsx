@@ -8,7 +8,7 @@ const WaitingPostGoodFeedback = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       window.open("https://g.page/r/CbGNujU_n6wgEB0/review", "_blank");
-      navigate("/question/view/feedback_list");
+      navigate("/smile/view/feedback_list");
     }, 5000);
     return () => {
       clearTimeout(timer);
@@ -22,10 +22,10 @@ const WaitingPostGoodFeedback = () => {
         </h1>
         <div className="w-[80%] my-[7rem] text-center">
           <p className="text-[2.5rem] font-normal">
-            Googleに具体的な内容を教えてください。
+            Googleにて具体的な内容を教えてください。
           </p>
           <p className="text-[2rem] font-normal mt-[1rem]">
-            ※数秒後に自動的にGoogleビジネスプロフィールの剣ト画面に切り替わります。
+            ※数秒後に自動的にGoogleビジネスプロフィールのレビュー画面に推移します。
           </p>
         </div>
         <Box sx={{ width: '100%' }}>
@@ -34,7 +34,7 @@ const WaitingPostGoodFeedback = () => {
         <button className="block w-[50%] rounded-full border-[2px] border-[#4085c9] bg-[#4085c9] hover:bg-white hover:text-[#4085c9] text-white text-[2rem] py-[1.5rem] my-[1rem]"
           onClick={() => {
             window.open("https://g.page/r/CbGNujU_n6wgEB0/review", "_blank");
-            navigate("/question/view/feedback_list");
+            navigate("/smile/view/feedback_list");
           }}>
           Google 公開フォームへ
         </button>

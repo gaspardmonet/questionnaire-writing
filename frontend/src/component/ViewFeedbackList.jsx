@@ -15,8 +15,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { getAllFeedbacks, updateAFeedback } from "../redux/slices/feedbackSlice";
-import { loginAdmin, updatePassword, resetUserStore, loginWithToken } from "../redux/slices/userSlice";
+import { getAllFeedbacks, updateAFeedback, deleteAFeedback } from "../redux/slices/feedbackSlice";
+import { loginAdmin, updatePassword, resetUserStore, loginWithToken, resetMessage } from "../redux/slices/userSlice";
 
 const theme = createTheme({
   components: {
@@ -53,6 +53,8 @@ const ViewFeedbackList = () => {
   const settingRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loginErrorMessage: loginError } = useSelector(state => state.user);
+  const { updatePasswrodErrorMessage: passwordError } = useSelector(state => state.user);
   const { allFeedbacks } = useSelector(state => state.feedback);
   const { allPages } = useSelector(state => state.feedback);
   const { token: token } = useSelector(state => state.user);
@@ -70,7 +72,6 @@ const ViewFeedbackList = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmErrorMessage, setConfirmErrorMessage] = useState("");
-  const [validateResponseAlert, setValidateResponseAlert] = useState("");
   const [visible_1, setVisible_1] = useState(false);
   const [visible_2, setVisible_2] = useState(false);
   const [visible_3, setVisible_3] = useState(false);
@@ -92,7 +93,8 @@ const ViewFeedbackList = () => {
       setIsAdmin(true);
     }
   }, [token]);
-  //------------------------------------------------------
+  //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------
   useEffect(() => {
     dispatch(getAllFeedbacks({
       page,
@@ -100,11 +102,19 @@ const ViewFeedbackList = () => {
     }));
   }, [searchParams]);
   useEffect(() => {
-    if(!searchParams.get("page")) {
-      setSearchParams({page: 1});
-      return;
+    if (!searchParams.get("page") || typeof (searchParams.get('page')) !== 'Number') {
+      setPage(1);
+    } else {
+      if (searchParams.get('page') > allPages) {
+        setPage(1);
+      } else {
+        setPage(searchParams.get('page'));
+      }
     }
   }, []);
+  useEffect(() => {
+    setSearchParams({ page: page });
+  }, [page]);
   //----------------------------------------------------------
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
@@ -135,16 +145,16 @@ const ViewFeedbackList = () => {
   const handleClickDeleteBtn = (feedbakcId) => {
     const alertMessage = "本当に削除しますか？";
     if (window.confirm(alertMessage)) {
-      dispatch(updateAFeedback({
+      dispatch(deleteAFeedback({
         id: feedbakcId,
-        response: ""
+        page: page,
+        unit: 10,
       }));
     }
   }
   //-------------------------------------------------------------------
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    setSearchParams({ page: newPage });
   }
   const changeDateFormat = (dateInfo) => {
     const date = new Date(dateInfo);
@@ -160,6 +170,30 @@ const ViewFeedbackList = () => {
     return `${year}.${month}.${d} ${hour}:${minute}:${second}`;
   }
   //--------------------------------------------------------------------
+  useEffect(() => {
+    console.log(loginError);
+    if (!loginError) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      dispatch(resetMessage());
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [loginError]);
+  useEffect(() => {
+    console.log(passwordError);
+    if (!passwordError) {
+      return;
+    }
+    const timer = setTimeout(() => {
+      dispatch(resetMessage());
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [passwordError]);
   const handleCloseLoginModal = () => {
     setAdminPassword("");
     setShowLoginModal(false);
@@ -169,8 +203,15 @@ const ViewFeedbackList = () => {
       email: adminEmail,
       password: adminPassword
     };
-    dispatch(loginAdmin(payload));
-    handleCloseLoginModal();
+    dispatch(loginAdmin(payload))
+      .then(res => {
+        if (res.payload) {
+          handleCloseLoginModal();
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      });
   }
   //-------------------------------------------------------------------------
   const handleClosePostResponseModal = () => {
@@ -179,10 +220,6 @@ const ViewFeedbackList = () => {
     setShowPostResponseModal(false);
   }
   const handleClickResponsePostBtn = (feedbakcId) => {
-    if (!adminResponse) {
-      setValidateResponseAlert("Please input the content for posting.");
-      return;
-    }
     const payload = {
       id: feedbakcId,
       response: adminResponse
@@ -190,6 +227,7 @@ const ViewFeedbackList = () => {
     dispatch(updateAFeedback(payload));
     setShowPostResponseModal(false);
   }
+  //----------------------------------------------------------
   const handleCloseChangePasswordModal = () => {
     setOldPassword("");
     setNewPassword("");
@@ -199,7 +237,6 @@ const ViewFeedbackList = () => {
   }
   const handleChangeConfirmPassword = (e) => {
     const confirmValue = e.target.value;
-    console.log(confirmValue);
     setConfirmPassword(confirmValue);
     if (newPassword !== confirmValue) {
       setConfirmErrorMessage("確認のためのパスワードが正しくありません。");
@@ -214,11 +251,15 @@ const ViewFeedbackList = () => {
     dispatch(updatePassword({
       currentPassword: oldPassword,
       newPassword: newPassword
-    }));
-    handleCloseChangePasswordModal();
-  }
-  const containerStyle = {
-    fontSize: '16px'
+    }))
+      .then(res => {
+        if (res.payload) {
+          handleCloseChangePasswordModal();
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      })
   }
   return (
     <div className="w-full">
@@ -311,6 +352,7 @@ const ViewFeedbackList = () => {
         onClose={handleCloseLoginModal}>
         <Box sx={style}>
           <div className="w-full">
+            <p className="text-red-500 text-[1.2rem] tracking-wider text-center py-[1rem]">{loginError}</p>
             <div className="w-full">
               <label htmlFor="input-adminId" className="text-[1.4rem] pr-[2rem]">メール番号</label>
               <input type="text" id="input-adminId" name="input-adminId" defaultValue={adminEmail} className="px-[1rem] py-[1rem] text-[1.4rem] rounded-md border-[1px] border-[rgb(64,133,201)] outline-none shadow-md " readOnly />
@@ -364,11 +406,6 @@ const ViewFeedbackList = () => {
                 placeholder="投稿内容を入力してください。" onChange={(e) => setAdminResponse(e.target.value)} value={adminResponse}>
               </textarea>
             </div>
-            {
-              validateResponseAlert && (
-                <p className="w-full text-red-500 mt-[1rem] text-[1.2rem]">{validateResponseAlert}</p>
-              )
-            }
             <div className="w-full flex justify-end items-center mt-[3rem]">
               <button className="text-[1.4rem] w-[10rem] py-[0.5rem] text-white rounded-full bg-[#4085c9] mr-[1rem] border-[1px] border-[#4085c9] hover:bg-white hover:text-[#4085c9]"
                 onClick={() => handleClickResponsePostBtn(postingFeedback.id)}>
@@ -387,6 +424,7 @@ const ViewFeedbackList = () => {
         onClose={handleCloseChangePasswordModal}>
         <Box sx={style}>
           <div className="w-full flex flex-col items-center">
+            <p className="text-red-500 text-[1.2rem] tracking-wider text-center py-[1rem]">{passwordError}</p>
             <div className="w-full flex justify-between items-center">
               <label htmlFor="input-admin-old-password" className="text-[1.4rem] pr-[2rem]">以前のパスワード</label>
               <div className="w-[65%] flex justify-between items-center px-[1rem] py-[0.5rem] text-[1.4rem] rounded-md border-[1px] border-[rgb(64,133,201)] shadow-md">

@@ -29,10 +29,16 @@ export const getAllFeedbacks = createAsyncThunk(
 export const updateAFeedback = createAsyncThunk(
   "feeeback/update",
   async (payload) => {
-    console.log(payload);
     const res = await http.put(`feedback/response/${payload.id}`, {
       response: payload.response
     });
+    return res.data;
+  }
+)
+export const deleteAFeedback = createAsyncThunk(
+  "feedback/delete",
+  async (payload) => {
+    const res = await http.delete(`feedback/delete/${payload.id}?page=${payload.page}&unit=${payload.unit}`);
     return res.data;
   }
 )
@@ -42,7 +48,6 @@ export const feedbackSlice = createSlice({
   initialState,
   reducers: {
     postTempFeedback: (state, action) => {
-      console.log(action.payload);
       state.tempFeedback = { ...action.payload };
     },
     resetFeedbackMessage: (state) => {
@@ -61,18 +66,13 @@ export const feedbackSlice = createSlice({
       })
       .addCase(postAFeedback.rejected, (state, action) => {
         state.message.status = 401;
-        state.message.content = action.error.message;
+        state.message.content = 'このレビューの投稿は失敗しました。';
       })
       .addCase(getAllFeedbacks.fulfilled, (state, action) => {
         state.allFeedbacks = [...action.payload.result];
         state.allPages = action.payload.allPages;
       })
-      .addCase(getAllFeedbacks.rejected, (state, action) => {
-        state.message.status = 401;
-        state.message.content = action.error?.message;
-      })
       .addCase(updateAFeedback.fulfilled, (state, action) => {
-        console.log(action.payload);
         const index = state.allFeedbacks.findIndex(item => item.id === action.payload.feedback.id);
         state.allFeedbacks[index] = action.payload.feedback;
         state.message.status = 200;
@@ -80,7 +80,17 @@ export const feedbackSlice = createSlice({
       })
       .addCase(updateAFeedback.rejected, (state, action) => {
         state.message.status = 401;
-        state.message.content = action.error?.message;
+        state.message.content = '更新に失敗しました。';
+      })
+      .addCase(deleteAFeedback.fulfilled, (state, action) => {
+        state.allFeedbacks = action.payload.result;
+        state.allPages = action.payload.allPages;
+        state.message.status = 200;
+        state.message.content = action.payload.message;
+      })
+      .addCase(deleteAFeedback.rejected, (state,action) => {
+        state.message.status = 401;
+        state.message.content = '削除に失敗しました。';
       })
   }
 });

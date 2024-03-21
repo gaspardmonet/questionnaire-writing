@@ -18,12 +18,12 @@ exports.loginAdmin = async (req, res) => {
     const user = await Admin.findOne({where: {email}});
     // return res.status(200).json(user);
     if (!user) {
-      return res.status(401).json({ message: 'This email does not exist.Please enter your email correctly.' }); //'このメールは存在しません。 もう一度メールアドレスを入力してください。'
+      return res.status(401).json({ message: 'このメールは存在しません。 もう一度メールアドレスを入力してください。' }); //'このメールは存在しません。 もう一度メールアドレスを入力してください。'
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'This password is incorrect. Please confirm your password.' });//'パスワードが間違っています。 パスワードを確認してください。'
+      return res.status(401).json({ message: 'パスワードが間違っています。 パスワードを確認してください。' });//'パスワードが間違っています。 パスワードを確認してください。'
     }
 
     const token = generateToken(user);
@@ -33,7 +33,7 @@ exports.loginAdmin = async (req, res) => {
         user,
         token
       },
-      message: 'Login Successfully'
+      message: 'ログインに成功しました。'
     });
   } catch (err) {
     console.error(err);
@@ -48,7 +48,7 @@ exports.loginWithToken = async (req, res) => {
     const user = await Admin.findByPk(userId);
     
     if (!user) {
-      return res.status(401).json({ message: 'This email does not exist.Please enter your email correctly.' });//'このメールは存在しません。 もう一度メールアドレスを入力してください。'
+      return res.status(401).json({ message: 'このメールは存在しません。 もう一度メールアドレスを入力してください。' });//'このメールは存在しません。 もう一度メールアドレスを入力してください。'
     }
     const token = generateToken(user);
     res.status(200).json({
@@ -93,7 +93,7 @@ exports.updatePassword = async (req, res) => {
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     
     if (!isMatch) {
-      return res.status(401).json({ message: 'This password is incorrect. Please confirm your password.' })//'パスワードが間違っています。 パスワードを確認してください。'
+      return res.status(401).json({ message: 'パスワードが間違っています。 パスワードを確認してください。' })//'パスワードが間違っています。 パスワードを確認してください。'
     }
     user.password = newPassword;
     await user.save();

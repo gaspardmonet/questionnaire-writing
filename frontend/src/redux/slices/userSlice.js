@@ -7,7 +7,9 @@ const initialState = {
   message: {
     status: "",
     content: ""
-  }
+  },
+  loginErrorMessage: "",
+  updatePasswordErrorMessage: "",
 }
 
 export const loginAdmin = createAsyncThunk(
@@ -48,15 +50,15 @@ export const userSlice = createSlice({
       localStorage.removeItem("token");
     },
     resetMessage: (state) => {
-      console.log("Reset Message");
       state.message.status = 0;
       state.message.content = "";
+      state.loginErrorMessage = "";
+      state.updatePasswordErrorMessage = "";
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginAdmin.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.userInfo = { ...action.payload.payload.user };
         state.token = action.payload.payload.token;
         localStorage.setItem("token", action.payload.payload.token);
@@ -66,9 +68,9 @@ export const userSlice = createSlice({
       .addCase(loginAdmin.rejected, (state, action) => {
         state.message.status = 401;
         state.message.content = action.error.message;
+        state.loginErrorMessage = 'パスワードが正しくありません。';
       })
       .addCase(updatePassword.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.userInfo = { ...action.payload.user };
         state.message.status = 200;
         state.message.content = action.payload.message;
@@ -76,9 +78,9 @@ export const userSlice = createSlice({
       .addCase(updatePassword.rejected, (state, action) => {
         state.message.status = 401;
         state.message.content = action.error.message;
+        state.updatePasswordErrorMessage = 'パスワードが正しくありません。';
       })
       .addCase(loginWithToken.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.userInfo = { ...action.payload.payload.user };
         state.token = action.payload.payload.token;
         localStorage.setItem("token", action.payload.payload.token);

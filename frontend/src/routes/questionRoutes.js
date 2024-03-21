@@ -7,27 +7,27 @@ import WaitingPostBadFeedback from "../component/WaitingPostBadFeedback";
 const QuestionRoutes = [
   {
     key: 'dashboard',
-    path: '/question',
+    path: '/smile',
     component: Dashboard
   },
   {
     key: 'postBadFeedback',
-    path: '/question/post/bad_feedback',
+    path: '/smile/post/bad_feedback',
     component: PostBadFeedback
   },
   {
     key: 'viewFeedbackList',
-    path: '/question/view/feedback_list',
+    path: '/smile/view/feedback_list',
     component: ViewFeedbackList
   },
   {
     key: 'waitingPostGoodFeedback',
-    path: '/question/post/good_feedback/waiting',
+    path: '/smile/post/good_feedback/waiting',
     component: WaitingPostGoodFeedback
   },
   {
     key: 'waitingPostBadFeedback',
-    path: '/question/post/bad_feedback/waiting',
+    path: '/smile/post/bad_feedback/waiting',
     component: WaitingPostBadFeedback
   },
 ];

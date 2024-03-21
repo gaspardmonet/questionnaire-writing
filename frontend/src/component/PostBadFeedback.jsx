@@ -17,7 +17,7 @@ const PostBadFeedback = () => {
       comment
     };
     dispatch(postAFeedback(payload));
-    navigate("/question/view/feedback_list");
+    navigate("/smile/view/feedback_list");
   }
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -37,12 +37,11 @@ const PostBadFeedback = () => {
           />
           <div className="w-full px-[2rem] mt-[2rem]">
             <textarea name="input-comment" id="input-comment" className="scrollbar-container min-h-[20rem] w-full outline-none text-[1.5rem] leading-loose tracking-wider text-[rgba(0,0,0,0.85)] p-[1rem] border-rgba(0,0,0,0.7) border-[2px] rounded-lg"
-            placeholder="星評価を選択したら、コメントやリクエストを聞いてください。" onChange={(e) => setComment(e.target.value)} value={comment}>
+            placeholder="コメントやご意見をお聞かせください。" onChange={(e) => setComment(e.target.value)} value={comment}>
             </textarea>
           </div>
         </div>
-        <button className={`block w-[50%] rounded-full text-white text-[2rem] py-[1.5rem] my-[1rem] border-[2px] ${comment ? 'border-[#4085c9] bg-[#4085c9] hover:text-[#4085c9] hover:bg-white' : 'border-[rgba(0,0,0,0.03)] bg-[rgba(0,0,0,0.5)] hover:cursor-not-allowed'}`}
-          disabled={comment ? false : true}
+        <button className={`block w-[50%] rounded-full text-white text-[2rem] py-[1.5rem] my-[1rem] border-[2px] border-[#4085c9] bg-[#4085c9] hover:text-[#4085c9] hover:bg-white`}
           onClick={handleClickPostBtn}>
           投稿
         </button>

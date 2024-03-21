@@ -5,7 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 const adminRoutes = require('./router/adminRoutes');
 const feedbackRoutes = require('./router/feedbackRoutes');
-const { initailizeModels, initializeModels } = require('./utils/initalize');
+const { initializeModels } = require('./utils/initalize');
 
 const app = express();
 initializeModels();

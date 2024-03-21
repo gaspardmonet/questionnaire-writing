@@ -7,7 +7,7 @@ const WaitingPostBadFeedback = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/question/post/bad_feedback");
+      navigate("/smile/post/bad_feedback");
     }, 5000);
     return () => {
       clearTimeout(timer);
@@ -32,11 +32,11 @@ const WaitingPostBadFeedback = () => {
         </Box>
         <div className="w-full flex justify-evenly items-center my-[1.5rem]">
           <button className="block w-[40%] rounded-full border-[2px] border-[rgba(0,0,0,0.03)] bg-[rgba(0,0,0,0.5)] hover:bg-white hover:text-[rgba(0,0,0,0.5)] hover:border-[rgba(0,0,0,0.5)] text-white text-[2rem] py-[1.5rem]"
-            onClick={() => navigate("/question")}>
+            onClick={() => navigate("/smile")}>
             キャンセル
           </button>
           <button className="block w-[40%] rounded-full border-[2px] border-[#4085c9] bg-[#4085c9] hover:bg-white hover:text-[#4085c9] text-white text-[2rem] py-[1.5rem]"
-            onClick={() => navigate("/question/post/bad_feedback")}>
+            onClick={() => navigate("/smile/post/bad_feedback")}>
             次へ
           </button>
         </div>
